@@ -1,23 +1,537 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="generator" content="GitLab Pages">
-    <title>Plain HTML site using GitLab Pages</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="navbar">
-      <a href="https://pages.gitlab.io/plain-html/">Plain HTML Example</a>
-      <a href="https://gitlab.com/pages/plain-html/">Repository</a>
-      <a href="https://gitlab.com/pages/">Other Examples</a>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Byte — Field notes from people who ship | Developer Blog Template</title>
+  <meta name="description" content="Byte is a free developer &amp; engineering blog template: dark-mode toggle, syntax-lit code blocks, language tags, series and newsletter. Bootstrap 5, vanilla JS.">
+  <meta name="theme-color" content="#f5f6f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+
+  <!-- flash-free theme init (blocking, self-hosted, CSP-safe) -->
+  <script src="js/theme-init.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="index.html" aria-label="Byte home">
+        <span>byte</span><span class="caret" aria-hidden="true"></span>
+      </a>
+
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Latest</a>
+        <a href="#topics">Topics</a>
+        <a href="#series">Series</a>
+        <a href="#people">Authors</a>
+        <a href="post.html">Read a post</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+        </button>
+        <a class="btn btn--ghost d-none d-sm-inline-flex" href="#newsletter">Subscribe</a>
+        <button class="icon-btn nav-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <h1>Hello World!</h1>
+  <main id="main">
 
-    <p>
-      This is a simple plain-HTML website on GitLab Pages, without any fancy static site generator.
-    </p>
-  </body>
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="kicker" style="margin-bottom:1.2rem;">// featured · read of the week</p>
+        <div class="hero-grid">
+
+          <!-- featured post -->
+          <article class="feature-card">
+            <div class="feature-media">
+              <span class="tag-abs"><span class="chip lang-rust"><span class="dot"></span>Rust</span></span>
+              <img src="img/hero.jpg" alt="A developer's desk with source code open across two monitors" loading="eager" width="1600" height="900">
+            </div>
+            <div class="feature-body">
+              <div class="pcard-chips">
+                <span class="chip chip--plain lang-rust"><span class="dot"></span>Systems</span>
+                <span class="chip chip--plain lang-devops"><span class="dot" style="--dot:#2c7a5f"></span>Performance</span>
+              </div>
+              <h1 id="hero-title"><a href="post.html">We cut cold-start latency 63% by rewriting our edge router in Rust</a></h1>
+              <p class="excerpt">The old router was fine until it wasn&rsquo;t. Here is the profiling trail, the three rewrites that didn&rsquo;t work, and the boring architecture that finally did &mdash; with flame graphs you can actually read.</p>
+              <div class="feature-foot">
+                <div class="byline">
+                  <img src="img/author1.jpg" alt="Portrait of Mara Ostrowski">
+                  <span>
+                    <b>Mara Ostrowski</b><br>
+                    <span class="m">Jul 12, 2026 · 11 min read</span>
+                  </span>
+                </div>
+                <a class="btn" href="post.html">Read it
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- terminal snippet -->
+          <div class="terminal" aria-label="Code snippet: edge router in Rust">
+            <div class="term-bar">
+              <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term-title"><span class="fn">router.rs</span> — edge/src</span>
+              <button class="copy-btn ms-auto" type="button" data-copy="#snippet-hero" aria-label="Copy code snippet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <pre class="code" id="snippet-hero"><span class="ln"><span class="gutter">1</span><span class="tk-key">use</span> axum::{Router, routing::<span class="tk-fn">get</span>};</span><span class="ln"><span class="gutter">2</span></span><span class="ln"><span class="gutter">3</span><span class="tk-key">async fn</span> <span class="tk-fn">handle</span>(req: Request) <span class="tk-punc">-&gt;</span> Response {</span><span class="ln"><span class="gutter">4</span>    <span class="tk-key">let</span> cache = EDGE.<span class="tk-fn">get_or_init</span>(warm).<span class="tk-key">await</span>;</span><span class="ln"><span class="gutter">5</span>    <span class="tk-key">match</span> cache.<span class="tk-fn">lookup</span>(<span class="tk-punc">&amp;</span>req.path) {</span><span class="ln"><span class="gutter">6</span>        <span class="tk-tag">Some</span>(hit) <span class="tk-punc">=&gt;</span> hit.<span class="tk-fn">into_response</span>(),</span><span class="ln"><span class="gutter">7</span>        <span class="tk-tag">None</span> <span class="tk-punc">=&gt;</span> origin::<span class="tk-fn">fetch</span>(req).<span class="tk-key">await</span>, <span class="tk-com">// cold path</span></span><span class="ln"><span class="gutter">8</span>    }</span><span class="ln"><span class="gutter">9</span>}</span></pre>
+            <div class="term-foot">
+              <span>cargo build --release</span>
+              <span class="ok">✓ compiled · 0 warnings · 340ms</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ LATEST ============================ -->
+    <section class="section band" aria-labelledby="latest-title">
+      <div class="wrap">
+        <div class="sec-head sec-head--row">
+          <div>
+            <p class="kicker">// the feed</p>
+            <h2 id="latest-title">Latest from the engineering desk</h2>
+          </div>
+          <a class="btn btn--ghost" href="#topics">Browse by topic
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="post-grid">
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post1.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-ts"><span class="dot"></span>TypeScript</span>
+                <span class="chip lang-js"><span class="dot"></span>Node</span>
+              </div>
+              <h3><a href="post.html">Debugging a memory leak that only happened on Tuesdays</a></h3>
+              <p class="excerpt">A weekly cron, a closure that captured too much, and a heap snapshot that finally told the truth.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author2.jpg" alt="Portrait of Dev Antani"><b>Dev Antani</b></span>
+                <span class="meta">8 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post2.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-sql"><span class="dot"></span>SQL</span>
+                <span class="chip lang-devops"><span class="dot" style="--dot:#2c7a5f"></span>DevOps</span>
+              </div>
+              <h3><a href="post.html">A pragmatic guide to zero-downtime Postgres migrations</a></h3>
+              <p class="excerpt">Expand, backfill, contract. The three-phase pattern that lets you ship schema changes at 2pm on a Wednesday.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author3.jpg" alt="Portrait of Lena Whitfield"><b>Lena Whitfield</b></span>
+                <span class="meta">14 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post3.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-ts"><span class="dot"></span>TypeScript</span>
+              </div>
+              <h3><a href="post.html">Type-safe environment variables without the boilerplate</a></h3>
+              <p class="excerpt">Parse once at the edge of your app, fail loud on boot, and never reach for <code class="mono">process.env</code> again.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author4.jpg" alt="Portrait of Kaito Brenner"><b>Kaito Brenner</b></span>
+                <span class="meta">6 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post4.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-go"><span class="dot"></span>Go</span>
+              </div>
+              <h3><a href="post.html">Writing a toy garbage collector in 300 lines of Go</a></h3>
+              <p class="excerpt">Mark, sweep, and a surprising amount of pointer arithmetic. A build-to-understand walkthrough.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author5.jpg" alt="Portrait of Priya Raman"><b>Priya Raman</b></span>
+                <span class="meta">17 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post5.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-web"><span class="dot" style="--dot:#b4394d"></span>Web</span>
+              </div>
+              <h3><a href="post.html">What actually happens when you type a URL, in 2026</a></h3>
+              <p class="excerpt">DNS-over-HTTPS, QUIC, edge caches and a service worker later &mdash; the canonical answer, refreshed.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author1.jpg" alt="Portrait of Mara Ostrowski"><b>Mara Ostrowski</b></span>
+                <span class="meta">12 min</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pcard">
+            <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post6.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+            <div class="pcard-body">
+              <div class="pcard-chips">
+                <span class="chip lang-rust"><span class="dot"></span>Rust</span>
+                <span class="chip lang-devops"><span class="dot" style="--dot:#2c7a5f"></span>gRPC</span>
+              </div>
+              <h3><a href="post.html">Load-testing gRPC: the numbers that surprised us</a></h3>
+              <p class="excerpt">Streaming vs unary, connection pools, and why p99 tail latency is the only metric that matters.</p>
+              <div class="pcard-foot">
+                <span class="byline"><img src="img/author2.jpg" alt="Portrait of Dev Antani"><b>Dev Antani</b></span>
+                <span class="meta">9 min</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CODE SHOWCASE ========================= -->
+    <section class="section" aria-labelledby="showcase-title">
+      <div class="wrap">
+        <div class="showcase">
+          <div class="lede">
+            <p class="kicker">// how we render code</p>
+            <h2 id="showcase-title">Snippets you can read at a glance &mdash; and copy in one click</h2>
+            <p>Every code block on Byte ships with a filename bar, language dot, real line numbers and a copy button. No client-side highlighter, no layout shift &mdash; the tokens are styled with plain CSS so pages stay fast even with a dozen listings.</p>
+            <ul class="feature-list">
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></span>
+                <span><b>Line numbers, always.</b> <span>Reference &ldquo;line 42&rdquo; in a comment and readers can actually find it.</span></span>
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></span>
+                <span><b>One-click copy.</b> <span>Grab the whole block without highlighting a single character.</span></span>
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+                <span><b>Dark by default.</b> <span>Code panels stay dark in both themes &mdash; the way you read them in your editor.</span></span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="code-panel">
+            <div class="term-bar">
+              <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term-title"><span class="chip lang-ts" style="background:transparent;border-color:#2a3240;color:#9aa7bb;padding:.15rem .45rem"><span class="dot"></span>env.ts</span></span>
+              <button class="copy-btn ms-auto" type="button" data-copy="#snippet-env" aria-label="Copy code snippet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <pre class="code" id="snippet-env"><span class="ln"><span class="gutter">1</span><span class="tk-key">import</span> { z } <span class="tk-key">from</span> <span class="tk-str">"zod"</span>;</span><span class="ln"><span class="gutter">2</span></span><span class="ln"><span class="gutter">3</span><span class="tk-com">// fail loudly at boot, not at 3am</span></span><span class="ln"><span class="gutter">4</span><span class="tk-key">const</span> Env = z.<span class="tk-fn">object</span>({</span><span class="ln"><span class="gutter">5</span>  DATABASE_URL: z.<span class="tk-fn">string</span>().<span class="tk-fn">url</span>(),</span><span class="ln"><span class="gutter">6</span>  PORT: z.<span class="tk-fn">coerce</span>.<span class="tk-fn">number</span>().<span class="tk-fn">default</span>(<span class="tk-num">3000</span>),</span><span class="ln"><span class="gutter">7</span>  NODE_ENV: z.<span class="tk-fn">enum</span>([<span class="tk-str">"dev"</span>, <span class="tk-str">"prod"</span>]),</span><span class="ln"><span class="gutter">8</span>});</span><span class="ln"><span class="gutter">9</span></span><span class="ln"><span class="gutter">10</span><span class="tk-key">export const</span> env = Env.<span class="tk-fn">parse</span>(process.env);</span></pre>
+            <div class="term-foot">
+              <span>vitest run env.test.ts</span>
+              <span class="ok">✓ 6 passed · 0 failed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TOPICS ============================ -->
+    <section class="section band" id="topics" aria-labelledby="topics-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker">// grep the archive</p>
+          <h2 id="topics-title">Read by topic</h2>
+          <p>Six streams, one shared bias toward things that actually run in production.</p>
+        </div>
+
+        <div class="topic-grid">
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-js"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 4H7a3 3 0 0 0-3 3v2a2 2 0 0 1-2 2 2 2 0 0 1 2 2v2a3 3 0 0 0 3 3h1M16 4h1a3 3 0 0 1 3 3v2a2 2 0 0 0 2 2 2 2 0 0 0-2 2v2a3 3 0 0 1-3 3h-1"/></svg></span>
+            <span><span class="t-name">JavaScript</span><span class="t-count">48 posts</span></span>
+          </a>
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-rust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>
+            <span><span class="t-name">Rust</span><span class="t-count">27 posts</span></span>
+          </a>
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-devops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 17l6-6-6-6M12 19h8"/></svg></span>
+            <span><span class="t-name">DevOps</span><span class="t-count">35 posts</span></span>
+          </a>
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-sys"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></span>
+            <span><span class="t-name">Systems</span><span class="t-count">22 posts</span></span>
+          </a>
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-web"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 4 5.7 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.7-4-9s1.4-6.5 4-9z"/></svg></span>
+            <span><span class="t-name">Web Platform</span><span class="t-count">41 posts</span></span>
+          </a>
+          <a class="topic" href="#latest-title">
+            <span class="tic tc-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z"/></svg></span>
+            <span><span class="t-name">Applied AI</span><span class="t-count">19 posts</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= SERIES + SIDEBAR ======================= -->
+    <section class="section" id="series" aria-labelledby="series-title">
+      <div class="wrap">
+        <div class="split">
+
+          <!-- series -->
+          <div class="series-card">
+            <div class="series-head">
+              <span class="series-badge">Series</span>
+              <h3 id="series-title">Building a database from scratch</h3>
+            </div>
+            <p class="mono" style="font-size:.82rem;color:var(--ink-soft);margin-bottom:1.4rem;">A six-part build log. We start with a single file on disk and end with distributed consensus &mdash; every episode compiles.</p>
+            <ol class="series-list">
+              <li class="done">
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">Storage engines &amp; the humble B-tree</a><span class="m">Published · 18 min</span></span>
+              </li>
+              <li class="done">
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">Write-ahead logging, so nothing is lost</a><span class="m">Published · 15 min</span></span>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">The query planner picks a fight</a><span class="m">New · 21 min</span></span>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">MVCC &amp; snapshot isolation</a><span class="m">Aug 5 · scheduled</span></span>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">Crash recovery without tears</a><span class="m">Aug 19 · scheduled</span></span>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true"></span>
+                <span class="txt"><a href="post.html">Distributed consensus, finally</a><span class="m">Sep 2 · scheduled</span></span>
+              </li>
+            </ol>
+          </div>
+
+          <!-- sidebar -->
+          <aside aria-label="Sidebar">
+            <div class="widget">
+              <h4 class="widget-title">Popular this week</h4>
+              <ol class="popular">
+                <li><span class="rank" aria-hidden="true"></span><a href="post.html">Stop reaching for a state library &mdash; useSyncExternalStore is enough<span class="m">4,201 reads</span></a></li>
+                <li><span class="rank" aria-hidden="true"></span><a href="post.html">The <code class="mono">Result</code> type finally comes to TypeScript<span class="m">3,884 reads</span></a></li>
+                <li><span class="rank" aria-hidden="true"></span><a href="post.html">I replaced my bash scripts with a 40-line Go binary<span class="m">3,157 reads</span></a></li>
+                <li><span class="rank" aria-hidden="true"></span><a href="post.html">Reading a flame graph like a detective<span class="m">2,640 reads</span></a></li>
+                <li><span class="rank" aria-hidden="true"></span><a href="post.html">Why your Docker image is 1.2GB (and how to fix it)<span class="m">2,489 reads</span></a></li>
+              </ol>
+            </div>
+
+            <div class="widget">
+              <h4 class="widget-title">Tags</h4>
+              <div class="tag-cloud">
+                <a href="#topics">#wasm</a>
+                <a href="#topics">#observability</a>
+                <a href="#topics">#kubernetes</a>
+                <a href="#topics">#compilers</a>
+                <a href="#topics">#postgres</a>
+                <a href="#topics">#tokio</a>
+                <a href="#topics">#edge</a>
+                <a href="#topics">#testing</a>
+                <a href="#topics">#profiling</a>
+                <a href="#topics">#grpc</a>
+              </div>
+            </div>
+
+            <div class="widget">
+              <h4 class="widget-title">Blog stats</h4>
+              <div class="spec-card" aria-label="Blog statistics">
+                <div class="row"><span class="k">posts.total</span><span class="v">212</span></div>
+                <div class="row"><span class="k">contributors</span><span class="v">14</span></div>
+                <div class="row"><span class="k">build.status</span><span class="v up">passing</span></div>
+                <div class="row"><span class="k">last.deploy</span><span class="v">2h ago</span></div>
+                <div class="row"><span class="k">rss.feed</span><span class="v">/feed.xml</span></div>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PEOPLE ============================ -->
+    <section class="section band" id="people" aria-labelledby="people-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker">// git log --authors</p>
+          <h2 id="people-title">Who writes here</h2>
+          <p>Working engineers, not full-time bloggers. Every post is something they shipped, broke, or fixed at 2am.</p>
+        </div>
+
+        <div class="people-grid">
+          <article class="person">
+            <img src="img/author1.jpg" alt="Portrait of Mara Ostrowski">
+            <b>Mara Ostrowski</b>
+            <span class="role">Staff Engineer · Edge</span>
+            <p class="bio">Latency nerd. Rewrites things in Rust so you don&rsquo;t have to.</p>
+            <div class="socials">
+              <a href="#people" aria-label="Mara on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+              <a href="#people" aria-label="Mara on Mastodon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M21.3 8.2c0-3.4-2.2-4.4-2.2-4.4-1.1-.5-3-.7-5-.8h-.1c-2 .01-3.9.3-5 .8 0 0-2.2 1-2.2 4.4 0 .8 0 1.7.05 2.7.15 3.3.68 6.6 3.7 7.4 1.4.4 2.6.5 3.6.4 1.7-.1 2.7-.6 2.7-.6l-.06-1.5s-1.3.4-2.7.35c-1.4-.05-2.9-.15-3.1-1.9v-.5s1.4.35 3.2.43c1.1.05 2.13-.06 3.17-.19 2-.24 3.7-1.47 3.94-2.6.35-1.77.32-4.31.32-4.31zm-3 5h-1.86V8.6c0-.95-.4-1.44-1.2-1.44-.9 0-1.34.57-1.34 1.7v2.46h-1.85V8.86c0-1.13-.45-1.7-1.34-1.7-.8 0-1.2.49-1.2 1.44v4.6H7.66V8.46c0-.95.24-1.7.73-2.26.5-.55 1.16-.84 1.98-.84.95 0 1.67.37 2.14 1.1l.46.78.46-.78c.47-.73 1.19-1.1 2.14-1.1.82 0 1.48.29 1.98.84.49.56.73 1.31.73 2.26v4.74z"/></svg></a>
+            </div>
+          </article>
+
+          <article class="person">
+            <img src="img/author2.jpg" alt="Portrait of Dev Antani">
+            <b>Dev Antani</b>
+            <span class="role">Backend · Platform</span>
+            <p class="bio">Chases tail latency and memory leaks for fun and profit.</p>
+            <div class="socials">
+              <a href="#people" aria-label="Dev on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+              <a href="#people" aria-label="Dev on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.1 8.1L23.2 22h-6.5l-5.1-6.6L5.8 22H2.7l7.6-8.7L1.6 2h6.6l4.6 6.1L18.9 2zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20z"/></svg></a>
+            </div>
+          </article>
+
+          <article class="person">
+            <img src="img/author3.jpg" alt="Portrait of Lena Whitfield">
+            <b>Lena Whitfield</b>
+            <span class="role">SRE · Data</span>
+            <p class="bio">Migrates production databases while everyone else sleeps.</p>
+            <div class="socials">
+              <a href="#people" aria-label="Lena on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+              <a href="#people" aria-label="Lena on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.27-.02-2.9-1.9-2.9-1.9 0-2.2 1.38-2.2 2.8V21H9z"/></svg></a>
+            </div>
+          </article>
+
+          <article class="person">
+            <img src="img/author4.jpg" alt="Portrait of Kaito Brenner">
+            <b>Kaito Brenner</b>
+            <span class="role">Frontend · DX</span>
+            <p class="bio">Makes types stricter and error messages kinder.</p>
+            <div class="socials">
+              <a href="#people" aria-label="Kaito on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+              <a href="#people" aria-label="Kaito on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.1 8.1L23.2 22h-6.5l-5.1-6.6L5.8 22H2.7l7.6-8.7L1.6 2h6.6l4.6 6.1L18.9 2zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20z"/></svg></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== NEWSLETTER ========================== -->
+    <section class="section newsletter" id="newsletter" aria-labelledby="nl-title">
+      <div class="wrap">
+        <div class="nl-wrap">
+          <div class="nl-copy">
+            <p class="kicker">// ./subscribe.sh</p>
+            <h2 id="nl-title">The changelog, in your inbox every Thursday</h2>
+            <p>One email a week: the three posts worth your time, a snippet of the week, and the occasional post-mortem. No growth-hacking, no tracking pixels, unsubscribe in one click.</p>
+            <p class="fineprint">// 9,400+ engineers · 42% open rate · zero spam</p>
+          </div>
+
+          <div class="nl-terminal">
+            <div class="term-bar">
+              <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term-title"><span class="fn">subscribe</span> — byte@changelog</span>
+            </div>
+            <div class="nl-body">
+              <p class="prompt"><span class="cmd">$ byte subscribe</span> <span class="flag">--to</span> changelog <span class="flag">--email</span></p>
+              <form class="nl-form" id="nl-form" novalidate>
+                <label class="visually-hidden" for="nl-email">Email address</label>
+                <input class="nl-input" id="nl-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.dev" required>
+                <button class="btn" type="submit">Subscribe
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+              </form>
+              <p class="nl-msg" id="nl-msg" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="index.html" aria-label="Byte home"><span>byte</span><span class="caret" aria-hidden="true"></span></a>
+          <p>Field notes from people who ship. Deep-dives, build logs and post-mortems on the software we run in production.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Byte on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+            <a href="#" aria-label="Byte on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.1 8.1L23.2 22h-6.5l-5.1-6.6L5.8 22H2.7l7.6-8.7L1.6 2h6.6l4.6 6.1L18.9 2zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20z"/></svg></a>
+            <a href="#" aria-label="Byte on Mastodon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M21.3 8.2c0-3.4-2.2-4.4-2.2-4.4-1.1-.5-3-.7-5-.8h-.1c-2 .01-3.9.3-5 .8 0 0-2.2 1-2.2 4.4 0 .8 0 1.7.05 2.7.15 3.3.68 6.6 3.7 7.4 1.4.4 2.6.5 3.6.4 1.7-.1 2.7-.6 2.7-.6l-.06-1.5s-1.3.4-2.7.35c-1.4-.05-2.9-.15-3.1-1.9v-.5s1.4.35 3.2.43c1.1.05 2.13-.06 3.17-.19 2-.24 3.7-1.47 3.94-2.6.35-1.77.32-4.31.32-4.31zm-3 5h-1.86V8.6c0-.95-.4-1.44-1.2-1.44-.9 0-1.34.57-1.34 1.7v2.46h-1.85V8.86c0-1.13-.45-1.7-1.34-1.7-.8 0-1.2.49-1.2 1.44v4.6H7.66V8.46c0-.95.24-1.7.73-2.26.5-.55 1.16-.84 1.98-.84.95 0 1.67.37 2.14 1.1l.46.78.46-.78c.47-.73 1.19-1.1 2.14-1.1.82 0 1.48.29 1.98.84.49.56.73 1.31.73 2.26v4.74z"/></svg></a>
+            <a href="#" aria-label="Byte RSS feed"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.18 17.82a1.82 1.82 0 1 1-3.64 0 1.82 1.82 0 0 1 3.64 0zM3 9.09v2.5A6.91 6.91 0 0 1 9.91 18.5h2.5A9.41 9.41 0 0 0 3 9.09zM3 3v2.5A13 13 0 0 1 16 18.5h2.5A15.5 15.5 0 0 0 3 3z"/></svg></a>
+          </div>
+        </div>
+
+        <div class="fcol">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="#topics">JavaScript</a></li>
+            <li><a href="#topics">Rust</a></li>
+            <li><a href="#topics">DevOps</a></li>
+            <li><a href="#topics">Systems</a></li>
+            <li><a href="#topics">Applied AI</a></li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <h4>Series</h4>
+          <ul>
+            <li><a href="#series">Build a database</a></li>
+            <li><a href="#series">Zero to production</a></li>
+            <li><a href="#series">Reading source</a></li>
+            <li><a href="post.html">Latest post</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <h4>Project</h4>
+          <ul>
+            <li><a href="#people">Authors</a></li>
+            <li><a href="#">Write for us</a></li>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Style guide</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Byte. Built for engineers who read the source.</p>
+        <p class="built">Free template by <a href="https://uicookies.com/" rel="noopener">uiCookies</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/vendor/bootstrap.bundle.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
 </html>
-

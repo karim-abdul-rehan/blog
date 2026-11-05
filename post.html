@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cutting cold-start latency 63% with a Rust edge router — Byte</title>
+  <meta name="description" content="A build log: how we profiled, rejected three rewrites, and shipped a boring Rust edge router that cut cold-start latency by 63%. Flame graphs, code and numbers.">
+  <meta name="theme-color" content="#f5f6f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+
+  <script src="js/theme-init.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="index.html" aria-label="Byte home">
+        <span>byte</span><span class="caret" aria-hidden="true"></span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
+        <a href="index.html">Latest</a>
+        <a href="index.html#topics">Topics</a>
+        <a href="index.html#series">Series</a>
+        <a href="index.html#people">Authors</a>
+        <a href="post.html" aria-current="page">Read a post</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+        </button>
+        <a class="btn btn--ghost d-none d-sm-inline-flex" href="index.html#newsletter">Subscribe</a>
+        <button class="icon-btn nav-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ========================= ARTICLE HERO ========================= -->
+    <article>
+      <div class="article-hero">
+        <div class="wrap">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">~/</a><span class="sl">/</span>
+            <a href="index.html#topics">rust</a><span class="sl">/</span>
+            <span>edge-router</span>
+          </nav>
+          <div class="pcard-chips" style="margin-top:1rem;">
+            <span class="chip lang-rust"><span class="dot"></span>Rust</span>
+            <span class="chip chip--plain lang-devops"><span class="dot" style="--dot:#2c7a5f"></span>Performance</span>
+            <span class="chip chip--plain"><span class="dot" style="--dot:#37507a"></span>Systems</span>
+          </div>
+          <h1 class="article-title">We cut cold-start latency 63% by rewriting our edge router in Rust</h1>
+          <p class="article-lead">The old router was fine until it wasn&rsquo;t. Here is the profiling trail, the three rewrites that didn&rsquo;t work, and the boring architecture that finally did.</p>
+          <div class="article-meta">
+            <div class="byline">
+              <img src="img/author1.jpg" alt="Portrait of Mara Ostrowski">
+              <span><b>Mara Ostrowski</b><br><span class="m">Staff Engineer, Edge</span></span>
+            </div>
+            <span class="meta">Jul 12, 2026<span class="sep"></span>11 min read<span class="sep"></span>Updated after launch</span>
+          </div>
+
+          <figure class="article-figure">
+            <div class="frame">
+              <img src="img/posthero.jpg" alt="A rack of servers in a data center, lit blue" width="1600" height="900">
+            </div>
+            <figcaption>// our edge fleet runs in 19 regions — cold starts hit every one of them.</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- ========================= ARTICLE BODY ========================= -->
+      <div class="section section--tight">
+        <div class="wrap">
+          <div class="article-shell">
+
+            <!-- TOC -->
+            <nav class="toc" aria-label="Table of contents">
+              <h4>On this page</h4>
+              <ol>
+                <li><a href="#symptom">The symptom</a></li>
+                <li><a href="#profiling">Where the time went</a></li>
+                <li><a href="#rewrites">Three rewrites that failed</a></li>
+                <li><a href="#architecture">The architecture that worked</a></li>
+                <li><a href="#results">The numbers</a></li>
+                <li><a href="#lessons">What we&rsquo;d do differently</a></li>
+              </ol>
+            </nav>
+
+            <!-- PROSE -->
+            <div class="prose">
+              <h2 id="symptom">The symptom</h2>
+              <p>Every request that hit a freshly-scheduled edge worker paid a tax. Not a huge one &mdash; about <strong>180&nbsp;ms</strong> on the median cold path &mdash; but at our volume that tax showed up as a fat bump on the p99 latency chart every time a region scaled up. Warm requests were fine. Cold ones were embarrassing.</p>
+              <p>The router was a small Node service: parse the request, look up a route in an in-memory table, forward to origin or serve from cache. Perfectly reasonable code. The problem was never the steady state &mdash; it was the <em>first</em> request after a worker booted.</p>
+
+              <div class="callout callout--note">
+                <span class="co-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+                <div class="co-body"><b>Definition</b><p>&ldquo;Cold start&rdquo; here means the wall-clock time from a worker receiving its first request to that request being fully served &mdash; including any lazy initialization the runtime does on the way.</p></div>
+              </div>
+
+              <h2 id="profiling">Where the time actually went</h2>
+              <p>Before touching a line of code we did the boring, correct thing: we measured. A flame graph of the cold path is worth a thousand hunches. We wrapped the hot handler in a sampling profiler and shipped it to 1% of traffic for a day.</p>
+              <p>The result was humbling. Route lookup &mdash; the part we&rsquo;d assumed was slow &mdash; was under a millisecond. The real cost was runtime warm-up: JIT compilation of the request path, and re-hydrating a 4&nbsp;MB routing table from JSON on every boot.</p>
+
+              <div class="codeblock">
+                <div class="cb-bar">
+                  <span class="cb-name"><span class="dot" style="background:#57a64a"></span>profile.sh</span>
+                  <button class="copy-btn" type="button" data-copy="#cb-1" aria-label="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                    <span class="copy-label">Copy</span>
+                  </button>
+                </div>
+                <pre class="code" id="cb-1"><span class="ln"><span class="gutter">1</span><span class="tk-com"># sample the cold path, fold, and render a flame graph</span></span><span class="ln"><span class="gutter">2</span>perf record <span class="tk-fn">-F</span> 999 <span class="tk-fn">-g</span> <span class="tk-punc">--</span> ./router <span class="tk-punc">--</span>cold-once</span><span class="ln"><span class="gutter">3</span>perf script <span class="tk-punc">|</span> stackcollapse-perf.pl <span class="tk-punc">&gt;</span> out.folded</span><span class="ln"><span class="gutter">4</span>flamegraph.pl out.folded <span class="tk-punc">&gt;</span> cold.svg</span></pre>
+              </div>
+
+              <p>Here is the shape of what came back &mdash; abbreviated, but the ratios are real:</p>
+
+              <pre class="output" aria-label="Profiler output"><span class="dim"># cold path, median of 200 samples</span>
+route.lookup .......... <span class="p">0.8 ms</span>   (0.4%)
+jit.warmup ............ <span class="warn">96.0 ms</span>  (53.3%)
+table.hydrate ........ <span class="warn">61.0 ms</span>  (33.9%)
+tls.handshake ........  18.0 ms  (10.0%)
+<span class="dim">------------------------------------------</span>
+total ................ 180.0 ms</pre>
+
+              <div class="pullquote">
+                <p>&ldquo;We were about to optimize the one part of the system that was already fast.&rdquo;</p>
+                <cite>// note-to-self, day two of the investigation</cite>
+              </div>
+
+              <h2 id="rewrites">Three rewrites that didn&rsquo;t work</h2>
+              <p>Knowing <em>where</em> the time went didn&rsquo;t hand us a fix. We tried three things, in order, and each taught us something before it fell over.</p>
+              <ol>
+                <li><strong>Cache the parsed table on disk.</strong> Shaved the hydrate cost but reintroduced it as a slow <code>fs.read</code> on the first request. Net wash.</li>
+                <li><strong>Precompile with a snapshot.</strong> Killed JIT warm-up in benchmarks, but the snapshot went stale on every deploy and the tooling fought us daily.</li>
+                <li><strong>Move the table to a sidecar.</strong> Great isolation, terrible latency &mdash; we&rsquo;d traded warm-up time for a network hop on the exact path we were trying to speed up.</li>
+              </ol>
+
+              <div class="callout callout--warn">
+                <span class="co-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+                <div class="co-body"><b>Watch out</b><p>Every one of these looked great in a microbenchmark. Microbenchmarks don&rsquo;t deploy, restart, or serve real traffic &mdash; measure the whole cold path or you&rsquo;ll optimize the wrong thing twice.</p></div>
+              </div>
+
+              <h2 id="architecture">The boring architecture that did</h2>
+              <p>The fix was not clever. We rewrote the router in Rust, embedded the routing table into the binary at compile time as a perfect-hash map, and let the OS memory-map it. No JIT, no JSON, no hydrate step &mdash; the table is simply <em>there</em> the instant the process starts.</p>
+
+              <div class="codeblock">
+                <div class="cb-bar">
+                  <span class="cb-name"><span class="dot" style="background:#d08b5b"></span>router.rs</span>
+                  <button class="copy-btn" type="button" data-copy="#cb-2" aria-label="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                    <span class="copy-label">Copy</span>
+                  </button>
+                </div>
+                <pre class="code" id="cb-2"><span class="ln"><span class="gutter">1</span><span class="tk-com">// table baked in at build time — zero startup cost</span></span><span class="ln"><span class="gutter">2</span><span class="tk-key">static</span> ROUTES: phf::Map&lt;&amp;str, Origin&gt; = <span class="tk-fn">phf_map!</span> {</span><span class="ln"><span class="gutter">3</span>    <span class="tk-str">"/api"</span> <span class="tk-punc">=&gt;</span> Origin::Api,</span><span class="ln"><span class="gutter">4</span>    <span class="tk-str">"/img"</span> <span class="tk-punc">=&gt;</span> Origin::Assets,</span><span class="ln"><span class="gutter">5</span>};</span><span class="ln"><span class="gutter">6</span></span><span class="ln"><span class="gutter">7</span><span class="tk-key">pub fn</span> <span class="tk-fn">route</span>(path: <span class="tk-punc">&amp;</span>str) <span class="tk-punc">-&gt;</span> Origin {</span><span class="ln"><span class="gutter">8</span>    ROUTES.<span class="tk-fn">get</span>(path).<span class="tk-fn">copied</span>().<span class="tk-fn">unwrap_or</span>(Origin::Origin)</span><span class="ln"><span class="gutter">9</span>}</span></pre>
+              </div>
+
+              <p>The handler itself stayed almost identical to the Node version &mdash; the win was entirely in <em>what didn&rsquo;t happen at boot</em>. We kept the same cache semantics and the same origin-fetch fallback so behavior was byte-for-byte compatible.</p>
+
+              <div class="callout callout--tip">
+                <span class="co-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></span>
+                <div class="co-body"><b>Takeaway</b><p>Reach for a compile-time constant before a runtime cache. The fastest hydrate step is the one that never runs.</p></div>
+              </div>
+
+              <h2 id="results">The numbers</h2>
+              <p>We rolled it out region by region behind a flag, comparing cold-path p50 and p99 against the Node baseline on identical hardware.</p>
+              <div class="codeblock">
+                <div class="cb-bar">
+                  <span class="cb-name"><span class="dot" style="background:#4b8bbe"></span>results.md</span>
+                  <button class="copy-btn" type="button" data-copy="#cb-3" aria-label="Copy table">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                    <span class="copy-label">Copy</span>
+                  </button>
+                </div>
+                <pre class="code" id="cb-3"><span class="ln"><span class="gutter">1</span>metric            node      rust     delta</span><span class="ln"><span class="gutter">2</span><span class="tk-com">----------------------------------------------</span></span><span class="ln"><span class="gutter">3</span>cold p50        <span class="tk-num">180 ms</span>   <span class="tk-str">67 ms</span>    <span class="tk-str">-63%</span></span><span class="ln"><span class="gutter">4</span>cold p99        <span class="tk-num">340 ms</span>  <span class="tk-str">121 ms</span>    <span class="tk-str">-64%</span></span><span class="ln"><span class="gutter">5</span>warm p50          <span class="tk-num">9 ms</span>    <span class="tk-str">6 ms</span>    <span class="tk-str">-33%</span></span><span class="ln"><span class="gutter">6</span>rss at boot      <span class="tk-num">92 MB</span>   <span class="tk-str">11 MB</span>    <span class="tk-str">-88%</span></span></pre>
+              </div>
+              <p>The memory drop was the surprise bonus. An 11&nbsp;MB resident set meant we could pack more workers per node, which meant fewer cold starts in the first place &mdash; a small virtuous cycle.</p>
+
+              <h2 id="lessons">What we&rsquo;d do differently</h2>
+              <p>Two things. First, we&rsquo;d have profiled on day one instead of day two &mdash; the two microbenchmark detours cost us a week of chasing the wrong bottleneck. Second, we&rsquo;d have written the compatibility test suite <em>before</em> the rewrite, not alongside it; catching the one header-casing difference early would have saved a nervous canary.</p>
+              <p>Would we reach for Rust again? For a hot, latency-critical path with a stable interface &mdash; yes, without hesitation. For a service that changes shape every sprint, the Node version was the right call for years. Boring is contextual.</p>
+
+              <!-- author box -->
+              <div class="author-box">
+                <img src="img/author1.jpg" alt="Portrait of Mara Ostrowski">
+                <div>
+                  <h4>Mara Ostrowski</h4>
+                  <p class="role">// Staff Engineer, Edge</p>
+                  <p>Works on the systems that decide where your requests go. Writes about latency, profiling and the unglamorous art of making software start faster.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RELATED -->
+      <section class="section related band" aria-labelledby="related-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">// see also</p>
+            <h2 id="related-title">Keep reading</h2>
+          </div>
+          <div class="post-grid">
+            <article class="pcard">
+              <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post6.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+              <div class="pcard-body">
+                <div class="pcard-chips"><span class="chip lang-rust"><span class="dot"></span>Rust</span></div>
+                <h3><a href="post.html">Load-testing gRPC: the numbers that surprised us</a></h3>
+                <p class="excerpt">Streaming vs unary, connection pools, and why p99 is the only metric that matters.</p>
+                <div class="pcard-foot"><span class="byline"><img src="img/author2.jpg" alt="Portrait of Dev Antani"><b>Dev Antani</b></span><span class="meta">9 min</span></div>
+              </div>
+            </article>
+            <article class="pcard">
+              <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post4.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+              <div class="pcard-body">
+                <div class="pcard-chips"><span class="chip lang-go"><span class="dot"></span>Go</span></div>
+                <h3><a href="post.html">Writing a toy garbage collector in 300 lines of Go</a></h3>
+                <p class="excerpt">Mark, sweep, and a surprising amount of pointer arithmetic.</p>
+                <div class="pcard-foot"><span class="byline"><img src="img/author5.jpg" alt="Portrait of Priya Raman"><b>Priya Raman</b></span><span class="meta">17 min</span></div>
+              </div>
+            </article>
+            <article class="pcard">
+              <a class="pcard-media" href="post.html" tabindex="-1" aria-hidden="true"><img src="img/post5.jpg" alt="" loading="lazy" width="1600" height="900"></a>
+              <div class="pcard-body">
+                <div class="pcard-chips"><span class="chip lang-web"><span class="dot" style="--dot:#b4394d"></span>Web</span></div>
+                <h3><a href="post.html">What actually happens when you type a URL, in 2026</a></h3>
+                <p class="excerpt">DNS-over-HTTPS, QUIC, edge caches and a service worker later.</p>
+                <div class="pcard-foot"><span class="byline"><img src="img/author1.jpg" alt="Portrait of Mara Ostrowski"><b>Mara Ostrowski</b></span><span class="meta">12 min</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </article>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="index.html" aria-label="Byte home"><span>byte</span><span class="caret" aria-hidden="true"></span></a>
+          <p>Field notes from people who ship. Deep-dives, build logs and post-mortems on the software we run in production.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Byte on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+            <a href="#" aria-label="Byte on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.1 8.1L23.2 22h-6.5l-5.1-6.6L5.8 22H2.7l7.6-8.7L1.6 2h6.6l4.6 6.1L18.9 2zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20z"/></svg></a>
+            <a href="#" aria-label="Byte on Mastodon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M21.3 8.2c0-3.4-2.2-4.4-2.2-4.4-1.1-.5-3-.7-5-.8h-.1c-2 .01-3.9.3-5 .8 0 0-2.2 1-2.2 4.4 0 .8 0 1.7.05 2.7.15 3.3.68 6.6 3.7 7.4 1.4.4 2.6.5 3.6.4 1.7-.1 2.7-.6 2.7-.6l-.06-1.5s-1.3.4-2.7.35c-1.4-.05-2.9-.15-3.1-1.9v-.5s1.4.35 3.2.43c1.1.05 2.13-.06 3.17-.19 2-.24 3.7-1.47 3.94-2.6.35-1.77.32-4.31.32-4.31zm-3 5h-1.86V8.6c0-.95-.4-1.44-1.2-1.44-.9 0-1.34.57-1.34 1.7v2.46h-1.85V8.86c0-1.13-.45-1.7-1.34-1.7-.8 0-1.2.49-1.2 1.44v4.6H7.66V8.46c0-.95.24-1.7.73-2.26.5-.55 1.16-.84 1.98-.84.95 0 1.67.37 2.14 1.1l.46.78.46-.78c.47-.73 1.19-1.1 2.14-1.1.82 0 1.48.29 1.98.84.49.56.73 1.31.73 2.26v4.74z"/></svg></a>
+            <a href="#" aria-label="Byte RSS feed"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.18 17.82a1.82 1.82 0 1 1-3.64 0 1.82 1.82 0 0 1 3.64 0zM3 9.09v2.5A6.91 6.91 0 0 1 9.91 18.5h2.5A9.41 9.41 0 0 0 3 9.09zM3 3v2.5A13 13 0 0 1 16 18.5h2.5A15.5 15.5 0 0 0 3 3z"/></svg></a>
+          </div>
+        </div>
+        <div class="fcol">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="index.html#topics">JavaScript</a></li>
+            <li><a href="index.html#topics">Rust</a></li>
+            <li><a href="index.html#topics">DevOps</a></li>
+            <li><a href="index.html#topics">Systems</a></li>
+            <li><a href="index.html#topics">Applied AI</a></li>
+          </ul>
+        </div>
+        <div class="fcol">
+          <h4>Series</h4>
+          <ul>
+            <li><a href="index.html#series">Build a database</a></li>
+            <li><a href="index.html#series">Zero to production</a></li>
+            <li><a href="index.html#series">Reading source</a></li>
+            <li><a href="index.html">Latest posts</a></li>
+            <li><a href="index.html#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="fcol">
+          <h4>Project</h4>
+          <ul>
+            <li><a href="index.html#people">Authors</a></li>
+            <li><a href="#">Write for us</a></li>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Style guide</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Byte. Built for engineers who read the source.</p>
+        <p class="built">Free template by <a href="https://uicookies.com/" rel="noopener">uiCookies</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/vendor/bootstrap.bundle.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
