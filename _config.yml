@@ -1,0 +1,18 @@
+title: "Karim Abdul Rehan"
+description: "A personal blog written in Markdown files."
+baseurl: ""
+url: "https://karim-abdul-rehan.github.io/blog"
+permalink: /:year/:month/:day/:title/
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+collections:
+  posts:
+    output: true
+    permalink: /posts/:title/
+
+header_pages:
+  - index.html
